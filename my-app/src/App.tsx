@@ -7,6 +7,12 @@ import { useState } from 'react';
 import { ThemeContext, themes } from './themeContext';
 
 function App() {
+  const [currentTheme, setCurrentTheme] = useState(themes.light);
+
+  const toggleTheme = () => {
+    setCurrentTheme(currentTheme === themes.light ? themes.dark : themes.light);
+  };
+
   const [currentLikes, setCurrentLikes] = useState<any[]>([]);
 
   const updateLikes = (like: any) => {
@@ -43,9 +49,9 @@ function App() {
   }
 
   return (
-    <div className='app-container'>
+    <div className='app-container' style={{ background: currentTheme.background, color: currentTheme.foreground }}>
       <LikesContext.Provider value={{ likes: currentLikes, updateLikes }}>
-        <ThemeContext.Provider value={themes.light}>
+        <ThemeContext.Provider value={currentTheme}>
           <form className="note-form" onSubmit={createNoteHandler}>
             <div>
               <input
@@ -84,6 +90,7 @@ function App() {
               <div
                 key={note.id}
                 className="note-item"
+                style={{backgroundColor: currentTheme.background, color: currentTheme.foreground}}
               >
                 <div className="notes-header">
                   <LikeButton name={note.title} />
@@ -95,8 +102,8 @@ function App() {
               </div>
             ))}
           </div>
-          <ToggleTheme />
           <LikeList />
+          <button onClick={toggleTheme} style={{backgroundColor: currentTheme.background, color: currentTheme.foreground}}> Toggle Theme </button>
         </ThemeContext.Provider>
       </LikesContext.Provider>
     </div>
