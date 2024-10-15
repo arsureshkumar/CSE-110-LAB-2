@@ -38,6 +38,10 @@ function App() {
     setCreateNote(initialNote);
   };
 
+  const deleteNoteHandlerFactory = (id: number) => {
+    return () => setNotes(notes.filter((note) => note.id !== id));
+  }
+
   return (
     <div className='app-container'>
       <LikesContext.Provider value={{ likes: currentLikes, updateLikes }}>
@@ -63,7 +67,7 @@ function App() {
             <div>
               <select
                 onChange={(event) =>
-                  setCreateNote({ ...createNote, label: event.target.value as Label})}
+                  setCreateNote({ ...createNote, label: event.target.value as Label })}
                 required>
                 <option value={Label.personal}>Personal</option>
                 <option value={Label.study}>Study</option>
@@ -82,8 +86,8 @@ function App() {
                 className="note-item"
               >
                 <div className="notes-header">
-                  <LikeButton name={note.title}/>
-                  <button>x</button>
+                  <LikeButton name={note.title} />
+                  <button onClick={deleteNoteHandlerFactory(note.id)}>x</button>
                 </div>
                 <h2 contentEditable> {note.title} </h2>
                 <p contentEditable> {note.content} </p>
